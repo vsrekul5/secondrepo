@@ -42,14 +42,8 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying the software!'
-                echo "running scripts ${SERVER_CREDENTIALS}"
                 echo "Deploying the software version ${params.VERSION}"
-                sh "${SERVER_CREDENTIALS}"
-                withCredentials([
-                    userNamePassword(credentials: 'admin-user', userNameVariable: user, userPasswordVariable: pwd)
-                ]){
-                  sh "Deploying the software! ${user} ${pwd}"
-                }
+
             }
         }
     }  
