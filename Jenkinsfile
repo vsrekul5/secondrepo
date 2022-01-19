@@ -2,7 +2,7 @@ pipeline {
     agent any
     parameters {
         string(name : 'VERSION', defaultValue: '', description: 'version to deploy on the production env')
-        choice(name:'VERSION', choices:['1.1.0', '1.2.0', '1.3.0'], description:'')
+        choice(name:'VERSION', choices:['','1.1.0', '1.2.0', '1.3.0'], description:'')
         booleanParam(name : 'executeTest', defaultValue: true, description: 'select the condition.....')
     }
     environment {
@@ -15,7 +15,7 @@ pipeline {
         stage('Building') {
             steps {
                 echo 'Building the software!'
-                echo "Building the software! VERSION ${NEW_VERSION}"
+                echo "Building the software! VERSION ${params.VERSION}"
             }
         }
         stage('Artifact Archiving') {
@@ -42,8 +42,14 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying the software!'
+                echo "running scripts ${SERVER_CREDENTIALS}"
                 echo "Deploying the software version ${params.VERSION}"
-
+                sh "${SERVER_CREDENTIALS}"
+                withCredentials([
+                    userNamePassword(credentials: 'admin-user', userNameVariable: user, userPasswordVariable: pwd)
+                ]){
+                  sh "Deploying the software! ${user} ${pwd}"
+                }
             }
         }
     }  
