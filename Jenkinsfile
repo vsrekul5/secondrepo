@@ -1,11 +1,16 @@
 pipeline {
     agent any
+    environment {
+        NEW_VERSION = '1.3.0'
+        SERVER_CREDENTIALS = credentials('admin-user')
+    }
 
     stages {
         
         stage('Building') {
             steps {
                 echo 'Building the software!'
+                echo "Building the software! VERSION ${NEW_VERSION}"
             }
         }
         stage('Artifact Archiving') {
@@ -13,10 +18,10 @@ pipeline {
                 echo 'The Artifact will be uploaded to an artifact repository'
             }
         }
-        stage('Testing') {
+        stage('Testing') { 
             when {
                 expression {
-                    BRANCH_NAME == 'dev'
+                    BRANCH_NAME == 'main'
                 }
             }
             steps {
@@ -32,6 +37,8 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying the software!'
+                echo "running scripts ${SERVER_CREDENTIALS}"
+                sh "${SERVER_CREDENTIALS}"
             }
         }
     }  
