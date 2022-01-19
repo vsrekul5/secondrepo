@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+    agent('agent1') {
 
     stages {
         
@@ -29,5 +29,6 @@ pipeline {
                 echo 'The software will now be deployed!'
             }
         }
-    }    
+    }  
+   }
 }
