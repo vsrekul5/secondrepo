@@ -5,7 +5,7 @@ pipeline {
         
         stage('Building') {
             steps {
-                echo 'The Code will be now be built into an artifact'
+                echo 'Building the software!'
             }
         }
         stage('Artifact Archiving') {
@@ -14,8 +14,13 @@ pipeline {
             }
         }
         stage('Testing') {
+            when {
+                expression {
+                    BRANCH_NAME == 'main'
+                }
+            }
             steps {
-                echo 'The Artifact will be tested'
+                echo 'Testing the software!'
             }
         }
         stage('Staging') {
@@ -26,9 +31,8 @@ pipeline {
         
         stage('Deploy') {
             steps {
-                echo 'The software will now be deployed!'
+                echo 'Deploying the software!'
             }
         }
     }  
-   
 }
