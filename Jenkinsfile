@@ -1,5 +1,10 @@
 pipeline {
     agent any
+    parameters {
+        string(name : 'VERSION', DefaultValue: '', description: 'version to deploy on the production env')
+        choice(name:'VERSION', choices:['1.1.0', '1.2.0', '1.3.0'], description:'')
+        booleanParam(name : 'executeTest', DefaultValue: true, description: 'select the condition.....')
+    }
     environment {
         NEW_VERSION = '1.3.0'
         SERVER_CREDENTIALS = credentials('admin-user')
@@ -21,7 +26,7 @@ pipeline {
         stage('Testing') { 
             when {
                 expression {
-                    BRANCH_NAME == 'main'
+                    param.executeTest == true
                 }
             }
             steps {
