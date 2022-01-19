@@ -39,6 +39,11 @@ pipeline {
                 echo 'Deploying the software!'
                 echo "running scripts ${SERVER_CREDENTIALS}"
                 sh "${SERVER_CREDENTIALS}"
+                withCredentials([
+                    userNamePassword(credentials: 'admin-user', userNameVariable: user, userPasswordVariable: pwd)
+                ]){
+                  sh "Deploying the software! ${user} ${pwd}"
+                }
             }
         }
     }  
